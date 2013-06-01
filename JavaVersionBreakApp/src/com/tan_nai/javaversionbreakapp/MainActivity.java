@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+
 public class MainActivity extends Activity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-	}
+	  public void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  GameSerfaceView surfaceview = new GameSerfaceView(this);
+	  setContentView(surfaceview);
+	  }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
