@@ -29,6 +29,16 @@ public class VersionNumber {
 		this.updateNumber = num;
 	}
 
+	public static long changeToLong(VersionNumber versionnum) {
+		return (((long) versionnum.getFamilyNumber() << 32L) + (long) versionnum.getUpdateNumber());
+	}
 
+	public boolean gt(VersionNumber version){
+		return changeToLong(version) < changeToLong(this);
+	}
+	
+	public boolean lt(VersionNumber version){
+		return changeToLong(version) > changeToLong(this);
+	}
 
 }

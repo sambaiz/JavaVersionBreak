@@ -34,7 +34,22 @@ public class JaversionTest {
 
 	@Test
 	public void changeToLongは下位32bitにunを振り上位32bitはfnを振ったものを返すこと() throws ParseException{
-		assertEquals((7l << 32l) + 1l ,Javersion.changeToLong(Javersion.parse("JDK7u1")));
+		assertEquals((7L << 32L) + 1L ,VersionNumber.changeToLong(Javersion.parse("JDK7u1")));
 	}
 
+	@Test
+	public void gtは引数とバージョンを比較し引数よりバージョンが大きければtrueを返すこと() throws ParseException{
+		assertTrue(Javersion.parse("JDK7u1").gt(Javersion.parse("JDK7u0")));
+		assertTrue(Javersion.parse("JDK8u1").gt(Javersion.parse("JDK7u1")));
+		assertFalse(Javersion.parse("JDK7u1").gt(Javersion.parse("JDK7u3")));
+		assertFalse(Javersion.parse("JDK7u1").gt(Javersion.parse("JDK7u1")));
+	}
+	
+	@Test
+	public void ltは引数とバージョンを比較し引数よりバージョンが小さければtrueを返すこと() throws ParseException{
+		assertTrue(Javersion.parse("JDK7u0").lt(Javersion.parse("JDK7u1")));
+		assertTrue(Javersion.parse("JDK7u1").lt(Javersion.parse("JDK8u1")));
+		assertFalse(Javersion.parse("JDK7u3").lt(Javersion.parse("JDK7u1")));
+		assertFalse(Javersion.parse("JDK7u1").lt(Javersion.parse("JDK7u1")));
+	}
 }

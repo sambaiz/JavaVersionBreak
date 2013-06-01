@@ -25,8 +25,4 @@ public class Javersion {
 		return new VersionNumber(Integer.parseInt(matcher.group(1)) ,Integer.parseInt(matcher.group(2)));
 	}
 
-	public static long changeToLong(VersionNumber versionnum) {
-		return (long) (((long) versionnum.getFamilyNumber() << 32l) + (long) versionnum.getUpdateNumber());
-	}
-
 }
