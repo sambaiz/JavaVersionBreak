@@ -20,7 +20,7 @@ public class SerfaceHolderCallBack implements SurfaceHolder.Callback, Runnable{
  private SurfaceHolder holder = null;
  private Thread thread = null;
  private boolean isAttached = true;
-private Bitmap sougen;
+private Bitmap sougen, sa, lu, cpu;
 private int width,height;
 private int droidx = 0, droidy = 0;
 private ArrayList<BugObject> bugs;
@@ -34,8 +34,11 @@ public SerfaceHolderCallBack(Context context){
   vn = new VersionNumber(7, 40);
   mokuhyo = new VersionNumber(7,66);
   sougen = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
+  sa = BitmapFactory.decodeResource(res, R.drawable.sa);
+  cpu = BitmapFactory.decodeResource(res, R.drawable.cpu);
+  lu = BitmapFactory.decodeResource(res, R.drawable.lu);
   bugs = new ArrayList<BugObject>();
-  bugs.add(new BugObject(width/2,0,0));
+  bugs.add(new BugObject(width/2, 0));
   }
 
  @Override
@@ -77,6 +80,7 @@ public SerfaceHolderCallBack(Context context){
 	 }
 	 if(vn.gt(mokuhyo)) return false;
 	 if(!vn.lt(mokuhyo)) mokuhyo.setFamilyNumber(mokuhyo.getFamilyNumber()+29);
+	 if(vn.getUpdateNumber() >= 1000) return false;
 	 return true;
  }
  
@@ -102,7 +106,9 @@ public SerfaceHolderCallBack(Context context){
   
   
   for(int i=0;i<bugs.size();i++){
-	  canvas.drawBitmap(sougen, bugs.get(i).x,bugs.get(i).y, paint);
+	  canvas.drawBitmap(((bugs.get(i).type==0)? sa :
+			  (bugs.get(i).type==1)? cpu :
+			  lu), bugs.get(i).x,bugs.get(i).y, paint);
   }
   
   //プレイヤー
@@ -117,11 +123,12 @@ public SerfaceHolderCallBack(Context context){
  	 holder.unlockCanvasAndPost(canvas);
  	 
  	 for(int i=0;i<bugs.size();i++){
- 		 bugs.get(i).y++;
+ 		 bugs.get(i).y++; 
  		 if(bugs.get(i).y==droidy){
  			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth() / 2){
  				 if(! versionUpdate(bugs.get(i))){
  					Intent intent = new Intent(con, GameoverActivity.class);
+ 					intent.putExtra("result", vn.getUpdateNumber());
  					con.startActivity(intent);
  				 }
  				 bugs.remove(i);
@@ -137,7 +144,7 @@ public SerfaceHolderCallBack(Context context){
  	 
  	 //無限湧き
  	 Random rand = new Random();
- 	 bugs.add(new BugObject(rand.nextInt(width),0,0));
+ 	 bugs.add(new BugObject(rand.nextInt(width),rand.nextInt(3)));
 
  	 // スリープ
  	 long t2 = System.currentTimeMillis();
