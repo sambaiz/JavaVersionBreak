@@ -65,4 +65,22 @@ public class JaversionTest {
 		assertEquals(5, Javersion.parse("JDK7u0").nextCriticalPatchUpdate().getUpdateNumber());
 		assertEquals(11, Javersion.parse("JDK7u9").nextCriticalPatchUpdate().getUpdateNumber());
 	}
+	
+	@Test
+	public void nextSecurityAlertは通常のアップデートを適用したバージョンのオブジェクトを返すこと() throws ParseException{
+		assertEquals(7, Javersion.parse("JDK7u0").nextSecurityUpdate().getFamilyNumber());
+		assertEquals(1, Javersion.parse("JDK7u0").nextSecurityUpdate().getUpdateNumber());
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void nextSecurityAlertが適用されたバージョンがLU_CPUと被るときは例外を投げること() throws ParseException{
+		Javersion.parse("JDK7u19").nextSecurityUpdate().getUpdateNumber();
+		Javersion.parse("JDK7u14").nextSecurityUpdate().getUpdateNumber();
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void nextCriticalPatchUpdateがLU_plus_1を使うときは例外を投げること() throws ParseException{
+		// Oracleから説明されていないケースは例外を投げさせる
+		Javersion.parse("JDK7u15").nextCriticalPatchUpdate().getUpdateNumber();
+	}
 }

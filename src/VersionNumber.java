@@ -47,7 +47,14 @@ public class VersionNumber {
 
 	public VersionNumber nextCriticalPatchUpdate() {
 		int tmp = (this.updateNumber / 5) + 1;
+		if(this.nextLimitedUpdate().getUpdateNumber() == (5 * tmp) - (tmp % 2)) throw new IllegalStateException();
 		return new VersionNumber(this.familyNumber, (5 * tmp) - (tmp % 2) + 1);
+	}
+
+	public VersionNumber nextSecurityUpdate() {
+		if(this.nextLimitedUpdate().getUpdateNumber() == this.updateNumber + 1) throw new IllegalStateException();
+		if(this.nextCriticalPatchUpdate().getUpdateNumber() == this.updateNumber + 1) throw new IllegalStateException();
+		return new VersionNumber(this.familyNumber, this.updateNumber + 1);
 	}
 
 }
