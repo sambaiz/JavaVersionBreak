@@ -21,4 +21,9 @@ public class GameSerfaceView extends SurfaceView{
   return true;
  	 
  }
+ 
+ public void move(float x){
+	 cb.move(x);
+ }
+ 
 }

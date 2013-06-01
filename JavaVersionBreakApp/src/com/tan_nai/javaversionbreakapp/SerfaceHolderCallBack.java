@@ -24,10 +24,12 @@ private int width,height;
 private int droidx = 0, droidy = 0;
 private ArrayList<BugObject> bugs;
 VersionNumber vn;
+VersionNumber mokuhyo;
  
 public SerfaceHolderCallBack(Context context){
   Resources res = context.getResources();
-  vn = new VersionNumber(7, 0);
+  vn = new VersionNumber(7, 40);
+  mokuhyo = new VersionNumber(7,66);
   sougen = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
   bugs = new ArrayList<BugObject>();
   bugs.add(new BugObject(width/2,0,0));
@@ -37,7 +39,7 @@ public SerfaceHolderCallBack(Context context){
  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 	 this.width = width;
 	 this.height = height;
-	 droidx = width/2;
+	 droidx = 0;
 	 droidy = (int) (height*0.8);
  }
 
@@ -54,7 +56,8 @@ public SerfaceHolderCallBack(Context context){
   thread = null; //スレッドを終了
  }
 
- private void versionUpdate(BugObject bug){
+ private boolean versionUpdate(BugObject bug){
+	 try{
 	switch(bug.type){
 	case 0:
 		vn = vn.nextSecurityUpdate();
@@ -66,6 +69,18 @@ public SerfaceHolderCallBack(Context context){
 		vn = vn.nextLimitedUpdate();
 		break;
 	}
+	 }catch(IllegalStateException e){
+		 return false;
+	 }
+	 if(vn.gt(mokuhyo)) return false;
+	 if(!vn.lt(mokuhyo)) mokuhyo.setFamilyNumber(mokuhyo.getFamilyNumber()+29);
+	 return true;
+ }
+ 
+ public void move(float x){
+	 droidx -= x;
+	 if(droidx>width-(sougen.getWidth() / 2)) droidx = width-(sougen.getWidth() / 2);
+	 if(droidx<(sougen.getWidth() / 2)) droidx=(sougen.getWidth() / 2);
  }
  
  @Override
@@ -86,8 +101,12 @@ public SerfaceHolderCallBack(Context context){
 	  canvas.drawBitmap(sougen, bugs.get(i).x,bugs.get(i).y, paint);
   }
   
-  canvas.drawBitmap(sougen, droidx , droidy , paint);
+  //プレイヤー
+  canvas.drawBitmap(sougen, droidx - (sougen.getWidth() / 2) , droidy , paint);
+  
+  //現在のバージョンと目標のバージョン
   canvas.drawText(vn.toString(), 0, 48, paint);
+  canvas.drawText(mokuhyo.toString(), 0, 96, paint);
 
 
  	 //描画処理を終了
@@ -108,8 +127,12 @@ public SerfaceHolderCallBack(Context context){
  			 }
  		 }
  	 }
+ 	 
+ 	 //無限湧き
+ 	 /*
  	 Random rand = new Random();
  	 bugs.add(new BugObject(rand.nextInt(width),0,2));
+ 	 */
 
  	 // スリープ
  	 long t2 = System.currentTimeMillis();
