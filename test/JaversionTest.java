@@ -44,12 +44,25 @@ public class JaversionTest {
 		assertFalse(Javersion.parse("JDK7u1").gt(Javersion.parse("JDK7u3")));
 		assertFalse(Javersion.parse("JDK7u1").gt(Javersion.parse("JDK7u1")));
 	}
-	
+
 	@Test
 	public void ltは引数とバージョンを比較し引数よりバージョンが小さければtrueを返すこと() throws ParseException{
 		assertTrue(Javersion.parse("JDK7u0").lt(Javersion.parse("JDK7u1")));
 		assertTrue(Javersion.parse("JDK7u1").lt(Javersion.parse("JDK8u1")));
 		assertFalse(Javersion.parse("JDK7u3").lt(Javersion.parse("JDK7u1")));
 		assertFalse(Javersion.parse("JDK7u1").lt(Javersion.parse("JDK7u1")));
+	}
+
+	@Test
+	public void nextLimitedUpdateはLUを適用したバージョンのオブジェクトを返すこと() throws ParseException{
+		assertEquals(7, Javersion.parse("JDK7u0").nextLimitedUpdate().getFamilyNumber());
+		assertEquals(20, Javersion.parse("JDK7u0").nextLimitedUpdate().getUpdateNumber());
+	}
+
+	@Test
+	public void nextCriticalPatchUpdateはCPUを適用したバージョンのオブジェクトを返すこと() throws ParseException{
+		assertEquals(7, Javersion.parse("JDK7u0").nextCriticalPatchUpdate().getFamilyNumber());
+		assertEquals(5, Javersion.parse("JDK7u0").nextCriticalPatchUpdate().getUpdateNumber());
+		assertEquals(11, Javersion.parse("JDK7u9").nextCriticalPatchUpdate().getUpdateNumber());
 	}
 }

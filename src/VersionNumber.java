@@ -36,9 +36,18 @@ public class VersionNumber {
 	public boolean gt(VersionNumber version){
 		return changeToLong(version) < changeToLong(this);
 	}
-	
+
 	public boolean lt(VersionNumber version){
 		return changeToLong(version) > changeToLong(this);
+	}
+
+	public VersionNumber nextLimitedUpdate() {
+		return new VersionNumber(this.familyNumber, 20 * ((this.updateNumber / 20) + 1));
+	}
+
+	public VersionNumber nextCriticalPatchUpdate() {
+		int tmp = (this.updateNumber / 5) + 1;
+		return new VersionNumber(this.familyNumber, (5 * tmp) - (tmp % 2) + 1);
 	}
 
 }
