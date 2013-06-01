@@ -1,5 +1,8 @@
 package com.tan_nai.javaversionbreakapp;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class SerfaceHolderCallBack implements SurfaceHolder.Callback, Runnable{
@@ -16,14 +20,23 @@ public class SerfaceHolderCallBack implements SurfaceHolder.Callback, Runnable{
  private Thread thread = null;
  private boolean isAttached = true;
 private Bitmap sougen;
+private int width,height;
+private int droidx = 0, droidy = 0;
+private ArrayList<BugObject> bugs;
  
 public SerfaceHolderCallBack(Context context){
   Resources res = context.getResources();
   sougen = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
+  bugs = new ArrayList<BugObject>();
+  bugs.add(new BugObject(width/2,0,0));
   }
 
  @Override
  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+	 this.width = width;
+	 this.height = height;
+	 droidx = width/2;
+	 droidy = (int) (height*0.8);
  }
 
  @Override
@@ -50,12 +63,33 @@ public SerfaceHolderCallBack(Context context){
  	 canvas.drawColor(0,PorterDuff.Mode.CLEAR );
  	 Paint paint = new Paint();
   paint.setColor(Color.WHITE);
-
-  canvas.drawBitmap(sougen, 100, 0, paint);
+  
+  for(int i=0;i<bugs.size();i++){
+	  canvas.drawBitmap(sougen, bugs.get(i).x,bugs.get(i).y, paint);
+  }
+  
+  canvas.drawBitmap(sougen, droidx , droidy , paint);
 
 
  	 //描画処理を終了
  	 holder.unlockCanvasAndPost(canvas);
+ 	 
+ 	 for(int i=0;i<bugs.size();i++){
+ 		 bugs.get(i).y++;
+ 		 if(bugs.get(i).y==droidy){
+ 			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth() / 2){
+ 				 bugs.remove(i);
+ 				 i--;
+ 			 }
+ 		 }else{
+ 			 if(bugs.get(i).y > height){
+ 				 bugs.remove(i);
+ 				 i--;
+ 			 }
+ 		 }
+ 	 }
+ 	 Random rand = new Random();
+ 	 bugs.add(new BugObject(rand.nextInt(width),0,0));
 
  	 // スリープ
  	 long t2 = System.currentTimeMillis();
