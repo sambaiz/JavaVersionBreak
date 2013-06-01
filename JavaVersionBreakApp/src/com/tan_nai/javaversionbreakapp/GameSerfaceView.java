@@ -7,11 +7,12 @@ import android.view.SurfaceView;
 public class GameSerfaceView extends SurfaceView{
 
  private SerfaceHolderCallBack cb;
+ private SurfaceHolder holder;
 
  public GameSerfaceView(Context context) {
  	super(context);
- 	SurfaceHolder holder = getHolder();
- 	cb = new SerfaceHolderCallBack(this.getContext());
+ 	holder = getHolder();
+ 	cb = new SerfaceHolderCallBack(context);
  	holder.addCallback(cb);
  }
  @Override
@@ -24,6 +25,12 @@ public class GameSerfaceView extends SurfaceView{
  
  public void move(float x){
 	 cb.move(x);
+ }
+ 
+ public void runStop(){
+//	 holder.removeCallback(cb);
+	 cb.surfaceDestroyed(holder);
+	 cb = null;
  }
  
 }

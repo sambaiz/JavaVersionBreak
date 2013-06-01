@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,9 +26,11 @@ private int droidx = 0, droidy = 0;
 private ArrayList<BugObject> bugs;
 VersionNumber vn;
 VersionNumber mokuhyo;
+Context con;
  
 public SerfaceHolderCallBack(Context context){
   Resources res = context.getResources();
+  con = context;
   vn = new VersionNumber(7, 40);
   mokuhyo = new VersionNumber(7,66);
   sougen = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
@@ -116,7 +119,10 @@ public SerfaceHolderCallBack(Context context){
  		 bugs.get(i).y++;
  		 if(bugs.get(i).y==droidy){
  			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth() / 2){
- 				 versionUpdate(bugs.get(i));
+ 				 if(! versionUpdate(bugs.get(i))){
+ 					Intent intent = new Intent(con, GameoverActivity.class);
+ 					con.startActivity(intent);
+ 				 }
  				 bugs.remove(i);
  				 i--;
  			 }
@@ -129,10 +135,8 @@ public SerfaceHolderCallBack(Context context){
  	 }
  	 
  	 //無限湧き
- 	 /*
  	 Random rand = new Random();
- 	 bugs.add(new BugObject(rand.nextInt(width),0,2));
- 	 */
+ 	 bugs.add(new BugObject(rand.nextInt(width),0,0));
 
  	 // スリープ
  	 long t2 = System.currentTimeMillis();

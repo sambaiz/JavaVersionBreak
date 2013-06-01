@@ -92,6 +92,11 @@ public class MainActivity extends Activity implements SensorEventListener{
 			}
 			
 		}
+		
+		@Override
+		public void onDestroy() {
+			surfaceview.runStop();
+		}
 	
 
 }
