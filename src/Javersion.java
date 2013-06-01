@@ -10,15 +10,23 @@ public class Javersion {
 	public static boolean isValid(String version) {
 		if(version == null) throw new IllegalArgumentException();
 		Matcher matcher = VERSION_PATTERN.matcher(version);
-		if(matcher.find() && Integer.parseInt(matcher.group(1)) >= 7) return true; 
+		if(matcher.find() && Integer.parseInt(matcher.group(1)) >= 7) return true;
 		return false;
 	}
 
 	public static VersionNumber parse(String version) throws ParseException {
-		if (! isValid(version)) throw new ParseException(version, 0);
+		try{
+			if (! isValid(version)) throw new ParseException(version, 0);
+		}catch(IllegalArgumentException e){
+			throw new ParseException(version, 0);
+		}
 		Matcher matcher = VERSION_PATTERN.matcher(version);
 		matcher.find();
 		return new VersionNumber(Integer.parseInt(matcher.group(1)) ,Integer.parseInt(matcher.group(2)));
+	}
+
+	public static long changeToLong(VersionNumber versionnum) {
+		return (long) (((long) versionnum.getFamilyNumber() << 32l) + (long) versionnum.getUpdateNumber());
 	}
 
 }
