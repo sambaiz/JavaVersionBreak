@@ -1,5 +1,4 @@
-# Android.gitignore
-# built application files
+# lt application files
 *.apk
 *.ap_
 
@@ -16,49 +15,10 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 
-.keystore
-
-# Global/Eclipse.gitignore
-*.pydevproject
-.project
-.metadata
-bin/**
-tmp/**
-tmp/**/*
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
+# eclipse settings
 .classpath
+.project
 .settings/
-.loadpath
 
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# CDT-specific
-.cproject
-
-# PDT-specific
-.buildpath
-
-# Global/OSX.gitignore
-.DS_Store
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Global/Windows.gitignore
-# Windows image file caches
-Thumbs.db 
-
-# Folder config file
-Desktop.ini
+# keystore
+.keystore
