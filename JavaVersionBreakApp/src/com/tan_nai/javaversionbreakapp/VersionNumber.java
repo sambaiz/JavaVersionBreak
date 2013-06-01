@@ -1,3 +1,4 @@
+package com.tan_nai.javaversionbreakapp;
 
 public class VersionNumber {
 
@@ -11,7 +12,7 @@ public class VersionNumber {
 		setUpdateNumber(updateNumber);
 	}
 	
-	public String moji(){
+	public String toString(){
 		return "JDK" + this.familyNumber + "u" + this.updateNumber;
 	}
 

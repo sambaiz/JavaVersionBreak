@@ -23,9 +23,11 @@ private Bitmap sougen;
 private int width,height;
 private int droidx = 0, droidy = 0;
 private ArrayList<BugObject> bugs;
+VersionNumber vn;
  
 public SerfaceHolderCallBack(Context context){
   Resources res = context.getResources();
+  vn = new VersionNumber(7, 0);
   sougen = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
   bugs = new ArrayList<BugObject>();
   bugs.add(new BugObject(width/2,0,0));
@@ -52,6 +54,20 @@ public SerfaceHolderCallBack(Context context){
   thread = null; //スレッドを終了
  }
 
+ private void versionUpdate(BugObject bug){
+	switch(bug.type){
+	case 0:
+		vn = vn.nextSecurityUpdate();
+		break;
+	case 1:
+		vn = vn.nextCriticalPatchUpdate();
+		break;
+	case 2:
+		vn = vn.nextLimitedUpdate();
+		break;
+	}
+ }
+ 
  @Override
  public void run() {
  	// メインループ（無限ループ）
@@ -63,12 +79,15 @@ public SerfaceHolderCallBack(Context context){
  	 canvas.drawColor(0,PorterDuff.Mode.CLEAR );
  	 Paint paint = new Paint();
   paint.setColor(Color.WHITE);
+  paint.setTextSize(40);
+  
   
   for(int i=0;i<bugs.size();i++){
 	  canvas.drawBitmap(sougen, bugs.get(i).x,bugs.get(i).y, paint);
   }
   
   canvas.drawBitmap(sougen, droidx , droidy , paint);
+  canvas.drawText(vn.toString(), 0, 48, paint);
 
 
  	 //描画処理を終了
@@ -78,6 +97,7 @@ public SerfaceHolderCallBack(Context context){
  		 bugs.get(i).y++;
  		 if(bugs.get(i).y==droidy){
  			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth() / 2){
+ 				 versionUpdate(bugs.get(i));
  				 bugs.remove(i);
  				 i--;
  			 }
@@ -89,7 +109,7 @@ public SerfaceHolderCallBack(Context context){
  		 }
  	 }
  	 Random rand = new Random();
- 	 bugs.add(new BugObject(rand.nextInt(width),0,0));
+ 	 bugs.add(new BugObject(rand.nextInt(width),0,2));
 
  	 // スリープ
  	 long t2 = System.currentTimeMillis();
