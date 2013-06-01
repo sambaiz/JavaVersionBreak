@@ -28,9 +28,7 @@ public class GameSerfaceView extends SurfaceView{
  }
  
  public void runStop(){
-//	 holder.removeCallback(cb);
 	 cb.surfaceDestroyed(holder);
-	 cb = null;
  }
  
 }

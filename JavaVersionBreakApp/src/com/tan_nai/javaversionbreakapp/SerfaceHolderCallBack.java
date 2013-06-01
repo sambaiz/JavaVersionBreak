@@ -94,6 +94,7 @@ public SerfaceHolderCallBack(Context context){
 
  	 //描画処理を開始
  	 Canvas canvas = holder.lockCanvas();
+ 	 if(canvas==null) continue;
  	 canvas.drawColor(0,PorterDuff.Mode.CLEAR );
  	 Paint paint = new Paint();
   paint.setColor(Color.WHITE);
