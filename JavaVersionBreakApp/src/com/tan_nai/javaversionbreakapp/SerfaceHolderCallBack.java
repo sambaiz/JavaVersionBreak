@@ -3,6 +3,7 @@ package com.tan_nai.javaversionbreakapp;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -79,7 +80,8 @@ public SerfaceHolderCallBack(Context context){
 		 return false;
 	 }
 	 if(vn.gt(mokuhyo)) return false;
-	 if(!vn.lt(mokuhyo)) mokuhyo.setFamilyNumber(mokuhyo.getFamilyNumber()+29);
+	 Random rand = new Random();
+	 if(!vn.lt(mokuhyo)) mokuhyo.setUpdateNumber(mokuhyo.getUpdateNumber()+rand.nextInt(100));
 	 if(vn.getUpdateNumber() >= 1000) return false;
 	 return true;
  }
@@ -115,8 +117,8 @@ public SerfaceHolderCallBack(Context context){
   canvas.drawBitmap(sougen, droidx - (sougen.getWidth() / 2) , droidy , paint);
   
   //現在のバージョンと目標のバージョン
-  canvas.drawText(vn.toString(), 0, 48, paint);
-  canvas.drawText(mokuhyo.toString(), 0, 96, paint);
+  canvas.drawText("今: "+vn.toString(), 0, 48, paint);
+  canvas.drawText("目標: "+mokuhyo.toString(), 0, 96, paint);
 
 
  	 //描画処理を終了
@@ -125,27 +127,34 @@ public SerfaceHolderCallBack(Context context){
  	 for(int i=0;i<bugs.size();i++){
  		 bugs.get(i).y++; 
  		 if(bugs.get(i).y==droidy){
- 			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth() / 2){
+ 			 if(Math.abs(bugs.get(i).x - droidx) <= sougen.getWidth()){
  				 if(! versionUpdate(bugs.get(i))){
  					Intent intent = new Intent(con, GameoverActivity.class);
  					intent.putExtra("result", vn.getUpdateNumber());
  					con.startActivity(intent);
+ 					((Activity) con).finish();
  				 }
+ 				Random rand = new Random();
+ 				bugs.add(new BugObject(rand.nextInt(width),rand.nextInt(3)));
  				 bugs.remove(i);
  				 i--;
  			 }
  		 }else{
  			 if(bugs.get(i).y > height){
+ 				 Random rand = new Random();
+ 				 for(int j=0;j<(vn.getUpdateNumber()/100)+1;j++){
+ 					 bugs.add(new BugObject(rand.nextInt(width),rand.nextInt(3)));
+ 				 }
  				 bugs.remove(i);
  				 i--;
  			 }
  		 }
  	 }
- 	 
+ 	 /*
  	 //無限湧き
  	 Random rand = new Random();
  	 bugs.add(new BugObject(rand.nextInt(width),rand.nextInt(3)));
-
+ 	  */
  	 // スリープ
  	 long t2 = System.currentTimeMillis();
  	 if(t2 - t1 < 16){ // 1000 / 60 = 16.6666

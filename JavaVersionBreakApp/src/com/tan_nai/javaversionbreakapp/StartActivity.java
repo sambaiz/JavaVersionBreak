@@ -27,6 +27,7 @@ public class StartActivity extends Activity implements OnClickListener{
 		if(v == start_button){
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
+			finish();
 		}
 	}
 
