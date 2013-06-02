@@ -24,13 +24,15 @@ public class MainActivity extends Activity implements SensorEventListener{
 		
 		GameSerfaceView surfaceview;
 		
+		boolean firstcreate;
+		
 		
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			surfaceview = new GameSerfaceView(this);
 			  setContentView(surfaceview);
-			  
+			  firstcreate=true;
 			initSensor();
 		}
 		
@@ -44,11 +46,18 @@ public class MainActivity extends Activity implements SensorEventListener{
 				this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
 				SensorManager.SENSOR_DELAY_GAME);
+			
+			if(!firstcreate){
+				surfaceview.runStart();
+			}else{
+				firstcreate = false;
+			}
 		}
 		
 		public void onPause(){
 			super.onPause();
 			sensorManager.unregisterListener(this);
+			surfaceview.runStop();
 		}
 		
 		

@@ -31,4 +31,8 @@ public class GameSerfaceView extends SurfaceView{
 	 cb.surfaceDestroyed(holder);
  }
  
+ public void runStart(){
+	 cb.surfaceCreated(holder);
+ }
+ 
 }

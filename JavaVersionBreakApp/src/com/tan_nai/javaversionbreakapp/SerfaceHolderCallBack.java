@@ -53,6 +53,7 @@ public SerfaceHolderCallBack(Context context){
  @Override
  public void surfaceCreated(SurfaceHolder holder) {
  	this.holder = holder;
+ 	isAttached=true;
  	thread = new Thread(this);
  	thread.start(); //スレッドを開始
  }
